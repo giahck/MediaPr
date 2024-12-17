@@ -1,0 +1,114 @@
+istruzzioni per sviluppare il progetto
+--npm run watch per avviare il server di sviluppo in modo che ogni modifica venga ricaricata automaticamente
+--php -S localhost:8000 oppure laragon nel mio caso
+per vedere solo cio che è stato fatto basta avviare php!
+
+
+Il sistema contine due parti principali: il backend e il frontend. Il backend gestisce la logica, il database e le rotte API, mentre il frontend gestisce l'interfaccia utente e le interazioni con l'utente.
+il fornt e gestito da un roting in js che permette di navigare tra le pagine html in maniera lazy e dinamica
+l'ambiente, per la gestione delle librerie esterne ess rxjs e jwt-token, e gestito da webpack dove l'ingresso e il file index.js e l'uscita e il file bundle.js in cui viene richiamato nel file index.php/top.php
+
+
+per far partire la creazione delle tabelle nel database bisogna andare nel file Database.php e mscommentare $setup = new DatabaseSetup($this->pdo); e poi eseguire il comando php -S localhost:8000
+
+//STRUTTURA DEL PROGETTO CARTELLE
+mediaprint/
+├──dist/bundle.js
+├── back/                        # Back-End: gestisce la logica, il database e le rotte API
+│   ├── config/                  # Configurazioni del database e setup iniziale
+│   │   ├── database.php         # Gestisce la connessione al database
+│   │   └── DatabaseSetup.php    # Gestisce la creazione delle tabelle nel database
+│   ├── controllers/             # Controller per gestire le richieste HTTP
+│   │   └── AuthController.php   # Gestisce le operazioni di autenticazione (login, logout, registrazione)
+│   ├── middleware/              # Middleware per gestire autenticazione e altre logiche intermedie
+│   │   ├── AuthMiddleware.php   # Verifica i token di autenticazione
+│   │   └── token.php            # Gestisce la generazione e la verifica dei token
+│   ├── models/                  # Modelli per interagire con il database
+│   │   └── Account.php          # Modello per la tabella account
+│   ├── routes/                  # Definizione delle rotte API
+│   │   └── api.php              # Rotte per le richieste API
+│   └── vendor/                  # Dipendenze del progetto (se presenti)
+├── front/                       # Front-End: CSS, JavaScript e viste per la parte frontend dell'applicazione
+│   ├── css/                     # File di stile CSS
+│   │   └── index.css            # File CSS principale
+│   ├── js/                      # File JavaScript per la parte frontend
+│   │   ├── components/          # Componente modulari per la UI
+│   │   │   ├── home.js          # Componente per la pagina home
+│   │   │   └── login.js         # Componente per la pagina di login
+│   │   ├── service/             # Servizi per la gestione delle API
+│   │   │   └── authService.js   # Servizio per gestire l'autenticazione
+│   │   ├── index.js             # File JavaScript principale
+│   │   ├── router.js            # Gestisce le rotte del frontend
+│   │   ├──utils.js             # Funzioni di utilità
+│   │   └──  pages/
+│   │        ├── login.html
+│   │        └── home.html
+│   └── view/                    # Viste HTML per la parte frontend
+│       ├── footer.php           # Piè di pagina HTML
+│       └── top.php              # Intestazione HTML
+├── .htaccess                    # Configurazione del server web
+├── index.php                    # File principale per gestire le richieste e includere le viste appropriate
+└── README.md                    # Descrizione del progetto e istruzioni per l'installazione
+
+
+
+il db La tabella `account` memorizza le informazioni degli utenti registrati.
+
+| Colonna       | Tipo                | Descrizione                                                                 |
+|---------------|---------------------|-----------------------------------------------------------------------------|
+| `id`          | INT AUTO_INCREMENT  | Chiave primaria della tabella. È un intero che si auto-incrementa.          |
+| `email`       | VARCHAR(255)        | Indirizzo email dell'utente. Deve essere unico e non può essere nullo.      |
+| `password`    | VARCHAR(255)        | Password dell'utente. È memorizzata come una stringa hashata.               |
+| `token`       | VARCHAR(255)        | Token di autenticazione dell'utente. Può essere nullo.                      |
+| `token_expiry`| DATETIME            | Data e ora di scadenza del token di autenticazione. Può essere nullo.       |
+| `created_at`  | TIMESTAMP           | Data e ora di creazione dell'account. È impostata automaticamente al momento della creazione. |
+
+
+La tabella `anagrafica` memorizza le informazioni personali degli utenti.
+
+| Colonna       | Tipo                | Descrizione                                                                 |
+|---------------|---------------------|-----------------------------------------------------------------------------|
+| `id`          | INT AUTO_INCREMENT  | Chiave primaria della tabella. È un intero che si auto-incrementa.          |
+| `account_id`  | INT                 | Chiave esterna che fa riferimento alla colonna `id` della tabella `account`. Non può essere nullo. |
+| `nome`        | VARCHAR(100)        | Nome dell'utente. Non può essere nullo.                                     |
+| `cognome`     | VARCHAR(100)        | Cognome dell'utente. Non può essere nullo.                                  |
+| `data_nascita`| DATE                | Data di nascita dell'utente. Non può essere nullo.                          |
+| `telefono`    | VARCHAR(15)         | Numero di telefono dell'utente. Può essere nullo.                           |
+| `indirizzo`   | TEXT                | Indirizzo dell'utente. Può essere nullo.                                    |
+| `created_at`  | TIMESTAMP           | Data e ora di creazione del record. È impostata automaticamente al momento della creazione. |
+
+
+
+back/: Contiene i file di configurazione, i controller, i middleware, i modelli e le rotte per la parte backend dell'applicazione.
+config/: Contiene i file di configurazione del database.
+database.php: Gestisce la connessione al database.
+DatabaseSetup.php: Gestisce la creazione delle tabelle nel database.
+controllers/: Contiene i controller per gestire le richieste HTTP.
+AuthController.php: Gestisce le operazioni di autenticazione come login, logout e registrazione.
+middleware/: Contiene i middleware per gestire l'autenticazione e altre logiche intermedie.
+AuthMiddleware.php: Verifica i token di autenticazione.
+token.php: Gestisce la generazione e la verifica dei token.
+models/: Contiene i modelli per interagire con il database.
+Account.php: Modello per la tabella account.
+routes/: Contiene le rotte per gestire le richieste API.
+api.php: Definisce le rotte per le richieste API.
+vendor/: Contiene le dipendenze del progetto (se presenti).
+front/: Contiene i file CSS, JavaScript e le viste per la parte frontend dell'applicazione.
+
+css/: Contiene i file CSS per la parte frontend.
+index.css: File CSS principale.
+js/: Contiene i file JavaScript per la parte frontend.
+components/: Contiene i componenti JavaScript.
+home.js: Componente per la pagina home.
+login.js: Componente per la pagina di login.
+service/: Contiene i servizi JavaScript.
+authService.js: Servizio per gestire l'autenticazione.
+index.js: File JavaScript principale.
+router.js: Gestisce le rotte del frontend.
+utils.js: Contiene funzioni di utilità.
+view/: Contiene le viste HTML per la parte frontend.
+footer.php: Piè di pagina HTML della pagina.
+top.php: Intestazione HTML della pagina.
+.htaccess: File di configurazione del server web.
+
+index.php: File principale che gestisce le richieste e include le viste appropriate.  

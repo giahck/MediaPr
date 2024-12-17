@@ -1,0 +1,49 @@
+body,html {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 0.9rem;
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.footer {
+    margin-top: auto;
+}
+.container-login{
+  min-height: 500px;
+}
+#login-container, #register-container {
+  transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+}
+/* .move-to-center {
+  transform: translateX(0%);
+  transition: transform 1s ease-in-out;
+} */
+
+/* Elemento che si sposta verso sinistra */
+.move-from-left {
+  transform: translateX(-140%);
+  opacity: 0.2;
+  transition: transform 1s ease-in-out;
+}
+
+/* Elemento che si sposta verso destra */
+.move-from-right {
+  transform: translateX(140%);
+  opacity: 0.2;
+  transition: transform 1s ease-in-out;
+}
+
+
+
+/* Elemento nascosto */
+.hidden {
+  display: none;
+}

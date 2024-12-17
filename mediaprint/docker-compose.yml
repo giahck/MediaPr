@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # Servizio PHP
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Usa il Dockerfile per abilitare l'estensione PDO
+    container_name: php-web
+    volumes:
+      - /media/sf_mediaprint/:/var/www/html
+      - ./custom-apache-config.conf:/etc/apache2/sites-available/000-default.conf
+    ports:
+      - "80:80"
+    environment:
+      MYSQL_HOST: mysql-db  # Usa il nome del servizio MySQL come host
+      MYSQL_USER: root      # Utente per il database
+      MYSQL_PASSWORD: rootpassword  # Password per l'utente
+      MYSQL_DB: app_database  # Nome del database
+    depends_on:
+      - mysql  # Assicurati che MySQL sia avviato prima di PHP
+    networks:
+      - webnet
+
+  # Servizio MySQL
+  mysql:
+    image: mysql:5.7
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Password per l'utente root
+      MYSQL_DATABASE: app_database  # Nome del database
+      MYSQL_USER: root  # Utente per il database
+      MYSQL_PASSWORD: rootpassword  # Password per l'utente
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - webnet
+
+networks:
+  webnet:
+
+volumes:
+  mysql-data:
